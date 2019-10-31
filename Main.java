@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class Main{
     //TODO eventuell _idx bei jedem Programmneustart löschen, weil sonst wird immer nur angehängt...
-    public static final String artikel_dat = "C:\\Users\\Jurek\\eclipse-workspace\\DBPrak1\\src\\ARTIKEL.DAT";
-    public static final String artikel_idx = "C:\\Users\\Jurek\\eclipse-workspace\\DBPrak1\\src\\ARTIKEL.IDX";
-    public static RandomAccessFile raf_dat;
-    public static RandomAccessFile raf_idx;
-    public static Scanner sc = new Scanner(System.in);
+    private static final String artikel_dat = "C:\\Users\\Jurek\\eclipse-workspace\\DBPrak1\\src\\ARTIKEL.DAT";
+    private static final String artikel_idx = "C:\\Users\\Jurek\\eclipse-workspace\\DBPrak1\\src\\ARTIKEL.IDX";
+    private static RandomAccessFile raf_dat;
+    private static RandomAccessFile raf_idx;
+    private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args){
         //Initialisierung der RandomAccessFiles
@@ -35,16 +35,20 @@ public class Main{
                     "4) ISAM-Indexliste persistieren und das Program beenden.\n");
             try{
                 auswahl = Integer.parseInt(sc.nextLine());
+                if(auswahl < 1 || auswahl > 4) throw new NumberFormatException();
             }catch(NumberFormatException e){
                 System.out.println("Bitte eine Nummer zwischen 1 und 4 eingeben.");
             }
 
             switch(auswahl){
-                case 1: datensatzErfassen(); break;
-                case 2: showDatensaetze();
+                //case 1: datensatzErfassen();
+                        //break;
+                case 2: Main.showDatensaetze();
+                        break;
                 case 3: Indexpaar.showIndexPaare(alleIndexPaare);
+                        break;
                 case 4: Indexpaar.writeMultiple(alleIndexPaare);
-
+                        break;
             }
         }
 
@@ -82,6 +86,7 @@ public class Main{
         String zeile = null;
         String[] gespaltet = new String[5];
         Indexpaar neuesIndexpaar = null;
+        int artnr = 0;
         long fp;
         try{
             raf_dat.seek(0);
@@ -92,15 +97,9 @@ public class Main{
         //solange machen, bis readLine() == null.
         while((zeile = raf_dat.readLine()) != null){
             try{
-                System.out.println(fp+":\n");
-                System.out.println(zeile);
                 gespaltet = zeile.split(";");
-                Artikel neuerArtikel = new Artikel(
-                        Integer.parseInt(gespaltet[0]), gespaltet[1], gespaltet[2],
-                        Double.parseDouble(gespaltet[3]), Integer.parseInt(gespaltet[4])
-                );
-                neuerArtikel.ArtikelToString();
-                neuesIndexpaar = new Indexpaar(neuerArtikel.artnr, fp);
+                artnr = Integer.parseInt(gespaltet[0]);
+                neuesIndexpaar = new Indexpaar(artnr, fp);
                 indexPaare.add(neuesIndexpaar);
                 fp = raf_dat.getFilePointer();
             }catch(IOException e){
@@ -110,6 +109,24 @@ public class Main{
         return indexPaare;
     }
 
+    public static ArrayList<Artikel> showDatensaetze(){
+        String zeile = null;
+        String[] gespaltet = new String[5];
+        ArrayList<Artikel> alleArtikel = new ArrayList<>();
+        try{
+            while((zeile = raf_dat.readLine()) != null){
+                gespaltet = zeile.split(";");
+                Artikel neuerArtikel = new Artikel(
+                        Integer.parseInt(gespaltet[0]), gespaltet[1], gespaltet[2],
+                        Double.parseDouble(gespaltet[3]), Integer.parseInt(gespaltet[4])
+                );
+                alleArtikel.add(neuerArtikel);
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return alleArtikel;
+    }
 
     public static void seekArtNrIDX(int artnr){
         //TODO wie sucht man in der .IDX?
