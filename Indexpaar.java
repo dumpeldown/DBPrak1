@@ -36,4 +36,43 @@ public class Indexpaar implements Serializable{
         }
     }
 
+    public static void showIndexPaare(ArrayList<Indexpaar> l){
+        System.out.println("Alle Indexpaare:\n");
+        for(Indexpaar idp : l){
+            System.out.println("   "+idp.artnr+":"+idp.offset+"\n");
+        }
+    }
+
+    //nicht nötig, da immer nur in -idx persistiert wird und nie gelesen.
+    //Gelesen wird immer nur aus Indexpaar Liste!
+    public static ArrayList<Indexpaar> readIndexPaar(){
+        FileInputStream fin = null;
+        ObjectInputStream ois = null;
+        ArrayList<Indexpaar> output = new ArrayList<>();
+        final String artikel_idx = "C:\\Users\\Jurek\\eclipse-workspace\\DBPrak1\\src\\ARTIKEL.IDX";
+        try{
+            fin = new FileInputStream(artikel_idx);
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+        try{
+            ois = new ObjectInputStream(fin);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        //read serialalized objects from .idx file.
+        try{
+            Indexpaar idp;
+            while((idp = (Indexpaar) ois.readObject()) != null){
+                output.add(idp);
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }catch(ClassNotFoundException e){
+            e.printStackTrace();
+        }
+
+        return output;
+    }
 }

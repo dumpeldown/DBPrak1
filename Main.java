@@ -1,6 +1,7 @@
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Main{
     //TODO eventuell _idx bei jedem Programmneustart löschen, weil sonst wird immer nur angehängt...
@@ -8,6 +9,7 @@ public class Main{
     public static final String artikel_idx = "C:\\Users\\Jurek\\eclipse-workspace\\DBPrak1\\src\\ARTIKEL.IDX";
     public static RandomAccessFile raf_dat;
     public static RandomAccessFile raf_idx;
+    public static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args){
         //Initialisierung der RandomAccessFiles
@@ -23,7 +25,28 @@ public class Main{
             e.printStackTrace();
         }
         //Passiert bei jedem programmstart
-        init(alleIndexPaare);
+        alleIndexPaare = init(alleIndexPaare);
+        int auswahl = -1;
+        while(auswahl != 4){
+            System.out.println(
+                    "1) Erfassen eines neuen Datensatzes.\n" +
+                    "2) Alle Datensatze aus artikel.dat anzeigen.\n" +
+                    "3) ISAM-Indexliste anzeigen und Datensatz anhand der Artikel-Nummer suchen.\n" +
+                    "4) ISAM-Indexliste persistieren und das Program beenden.\n");
+            try{
+                auswahl = Integer.parseInt(sc.nextLine());
+            }catch(NumberFormatException e){
+                System.out.println("Bitte eine Nummer zwischen 1 und 4 eingeben.");
+            }
+
+            switch(auswahl){
+                case 1: datensatzErfassen(); break;
+                case 2: showDatensaetze();
+                case 3: Indexpaar.showIndexPaare(alleIndexPaare);
+                case 4: Indexpaar.writeMultiple(alleIndexPaare);
+
+            }
+        }
 
         //Menüführung.
         //a) erfassen neuer Datensätze
@@ -46,12 +69,13 @@ public class Main{
          */
 
 
-    public static void init(ArrayList<Indexpaar> alleIndexPaare){
+    public static ArrayList<Indexpaar> init(ArrayList<Indexpaar> alleIndexPaare){
         try{
             alleIndexPaare = datToList();
         }catch(IOException e){
             e.printStackTrace();
         }
+        return alleIndexPaare;
     }
     public static ArrayList<Indexpaar> datToList() throws IOException{
         ArrayList<Indexpaar> indexPaare = new ArrayList<>();
@@ -65,7 +89,7 @@ public class Main{
             e.printStackTrace();
         }
         fp = raf_dat.getFilePointer();
-        //TODO solange machen, bis readLine() == null.
+        //solange machen, bis readLine() == null.
         while((zeile = raf_dat.readLine()) != null){
             try{
                 System.out.println(fp+":\n");
