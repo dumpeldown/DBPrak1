@@ -1,31 +1,18 @@
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main{
     //TODO eventuell _idx bei jedem Programmneustart löschen, weil sonst wird immer nur angehängt...
-    private static final String artikel_dat = "C:\\Users\\Jurek\\eclipse-workspace\\DBPrak1\\src\\ARTIKEL.DAT";
-    private static final String artikel_idx = "C:\\Users\\Jurek\\eclipse-workspace\\DBPrak1\\src\\ARTIKEL.IDX";
-    private static RandomAccessFile raf_dat;
-    private static RandomAccessFile raf_idx;
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args){
-        //Initialisierung der RandomAccessFiles
-        ArrayList<Indexpaar> alleIndexPaare = new ArrayList<>();
-        try{
-            raf_dat = new RandomAccessFile(artikel_dat, "rw");
-        }catch(FileNotFoundException e){
-            e.printStackTrace();
-        }
-        try{
-            raf_idx = new RandomAccessFile(artikel_idx, "rw");
-        }catch(FileNotFoundException e){
-            e.printStackTrace();
-        }
+
         //Passiert bei jedem programmstart
-        alleIndexPaare = init(alleIndexPaare);
+        DatenVerwaltung.initFiles();
+        DatenVerwaltung.initIndexPaare();
         int auswahl = -1;
         while(auswahl != 4){
             System.out.println(
@@ -43,11 +30,11 @@ public class Main{
             switch(auswahl){
                 //case 1: datensatzErfassen();
                         //break;
-                case 2: Main.showDatensaetze();
+                case 2: DatenVerwaltung.showDatensaetze();
                         break;
-                case 3: Indexpaar.showIndexPaare(alleIndexPaare);
+                case 3: Indexpaar.showIndexPaare(DatenVerwaltung.alleIndexPaare);
                         break;
-                case 4: Indexpaar.writeMultiple(alleIndexPaare);
+                case 4: Indexpaar.writeMultiple(DatenVerwaltung.alleIndexPaare);
                         break;
             }
         }
@@ -73,60 +60,6 @@ public class Main{
          */
 
 
-    public static ArrayList<Indexpaar> init(ArrayList<Indexpaar> alleIndexPaare){
-        try{
-            alleIndexPaare = datToList();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        return alleIndexPaare;
-    }
-    public static ArrayList<Indexpaar> datToList() throws IOException{
-        ArrayList<Indexpaar> indexPaare = new ArrayList<>();
-        String zeile = null;
-        String[] gespaltet = new String[5];
-        Indexpaar neuesIndexpaar = null;
-        int artnr = 0;
-        long fp;
-        try{
-            raf_dat.seek(0);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        fp = raf_dat.getFilePointer();
-        //solange machen, bis readLine() == null.
-        while((zeile = raf_dat.readLine()) != null){
-            try{
-                gespaltet = zeile.split(";");
-                artnr = Integer.parseInt(gespaltet[0]);
-                neuesIndexpaar = new Indexpaar(artnr, fp);
-                indexPaare.add(neuesIndexpaar);
-                fp = raf_dat.getFilePointer();
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-        }
-        return indexPaare;
-    }
-
-    public static ArrayList<Artikel> showDatensaetze(){
-        String zeile = null;
-        String[] gespaltet = new String[5];
-        ArrayList<Artikel> alleArtikel = new ArrayList<>();
-        try{
-            while((zeile = raf_dat.readLine()) != null){
-                gespaltet = zeile.split(";");
-                Artikel neuerArtikel = new Artikel(
-                        Integer.parseInt(gespaltet[0]), gespaltet[1], gespaltet[2],
-                        Double.parseDouble(gespaltet[3]), Integer.parseInt(gespaltet[4])
-                );
-                alleArtikel.add(neuerArtikel);
-            }
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        return alleArtikel;
-    }
 
     public static void seekArtNrIDX(int artnr){
         //TODO wie sucht man in der .IDX?

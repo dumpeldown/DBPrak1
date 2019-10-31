@@ -30,6 +30,37 @@ public class Indexpaar implements Serializable{
             e.printStackTrace();
         }
     }
+
+    static ArrayList<Indexpaar> getIndexPaare(){
+        ArrayList<Indexpaar> indexPaare = new ArrayList<>();
+        String zeile = null;
+        String[] gespaltet = new String[5];
+        Indexpaar neuesIndexpaar = null;
+        int artnr = 0;
+        long fp;
+        try{
+            DatenVerwaltung.raf_dat.seek(0);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        try{
+        fp = DatenVerwaltung.raf_dat.getFilePointer();
+        //solange machen, bis readLine() == null.
+        while((zeile = DatenVerwaltung.raf_dat.readLine()) != null){
+
+                gespaltet = zeile.split(";");
+                artnr = Integer.parseInt(gespaltet[0]);
+                neuesIndexpaar = new Indexpaar(artnr, fp);
+                indexPaare.add(neuesIndexpaar);
+                fp = DatenVerwaltung.raf_dat.getFilePointer();
+        }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        return indexPaare;
+    }
+
+
     public static void writeMultiple(ArrayList<Indexpaar> alleIndexPaare){
         for(Indexpaar ip: alleIndexPaare){
             Indexpaar.writeIndexPaar(ip);
