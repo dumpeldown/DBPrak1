@@ -15,17 +15,25 @@ public class Artikel{
     double preis;
     int steu;
 
-    public void ArtikelToString(){
+    public void ArtikelToPrint(){
         System.out.println(
                 "Artikelbez: "+this.artbez+", ArtNr: "+ this.artnr+ ", Mge: "
                         + this.mge+", Preis: "+this.preis+" Steuer: "+ this.steu);
     }
 
+    public String ArtikelToString(){
+        return
+                (this.artbez+";"+ this.artnr+ ";"
+                        + this.mge+";"+this.preis+";"+ this.steu);
+    }
+
     static ArrayList<Artikel> getAllArtikel(){
         ArrayList<Artikel> alleArtikel = new ArrayList<>();
-        String zeile = null;
+        String zeile;
         String[] gespaltet = new String[5];
+
         try{
+            DatenVerwaltung.raf_dat.seek(0);
             while((zeile = DatenVerwaltung.raf_dat.readLine()) != null){
                 gespaltet = zeile.split(";");
                 Artikel neuerArtikel = new Artikel(
@@ -33,10 +41,19 @@ public class Artikel{
                         Double.parseDouble(gespaltet[3]), Integer.parseInt(gespaltet[4])
                 );
                 alleArtikel.add(neuerArtikel);
+                neuerArtikel.ArtikelToString();
             }
         }catch(IOException e){
             e.printStackTrace();
         }
         return alleArtikel;
+    }
+
+    static void writeArtikel(Artikel neu){
+        try{
+            DatenVerwaltung.raf_dat.writeBytes("\n"+neu.ArtikelToString());
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }

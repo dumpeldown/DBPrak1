@@ -28,8 +28,8 @@ public class Main{
             }
 
             switch(auswahl){
-                //case 1: datensatzErfassen();
-                        //break;
+                case 1: DatenVerwaltung.datensatzErfassen();
+                        break;
                 case 2: DatenVerwaltung.showDatensaetze();
                         break;
                 case 3: Indexpaar.showIndexPaare(DatenVerwaltung.alleIndexPaare);
