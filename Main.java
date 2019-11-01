@@ -50,20 +50,8 @@ public class Main{
     }
 
 
-    //B) alle datensätze anzeigen:
-        /*
-        System.out.println("1. Indexpaar ausgegeben:!!!");
-        System.out.println(alleIndexPaare.get(0).offset+":"+alleIndexPaare.get(0).artnr);
-        System.out.println("2. Indexpaar ausgegeben:!!!");
-        System.out.println(alleIndexPaare.get(1).offset+":"+alleIndexPaare.get(1).artnr);
-        Indexpaar.writeMultiple(alleIndexPaare);
-         */
-
-
 
     public static void seekArtNrIDX(int artnr){
-        //TODO wie sucht man in der .IDX?
-        //TODO Serialisiert aus .idx auslesen, dann in jedem object die artnr suchen.
-
+        //TODO in der alleIndexpaare liste suchen.
     }
 }

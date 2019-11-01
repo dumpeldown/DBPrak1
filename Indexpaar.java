@@ -1,7 +1,8 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class Indexpaar implements Serializable{
+public class Indexpaar implements Serializable, Comparable{
     public Indexpaar(int artnr, long offset){
         this.artnr = artnr;
         this.offset = offset;
@@ -52,6 +53,7 @@ public class Indexpaar implements Serializable{
                 artnr = Integer.parseInt(gespaltet[0]);
                 neuesIndexpaar = new Indexpaar(artnr, fp);
                 indexPaare.add(neuesIndexpaar);
+                Collections.sort(indexPaare);
                 fp = DatenVerwaltung.raf_dat.getFilePointer();
         }
         }catch(IOException e){
@@ -72,5 +74,10 @@ public class Indexpaar implements Serializable{
         for(Indexpaar idp : l){
             System.out.println("   "+idp.artnr+":"+idp.offset+"\n");
         }
+    }
+
+    @Override
+    public int compareTo(Object o){
+        return Integer.compare(this.artnr, ((Indexpaar)o).artnr);
     }
 }

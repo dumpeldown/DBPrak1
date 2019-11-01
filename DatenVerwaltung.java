@@ -34,7 +34,7 @@ public class DatenVerwaltung{
 
     public static void showDatensaetze(){
         for(Artikel a : Artikel.getAllArtikel()){
-            a.ArtikelToString();
+            a.ArtikelToPrint();
         }
     }
 

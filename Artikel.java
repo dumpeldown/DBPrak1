@@ -23,7 +23,7 @@ public class Artikel{
 
     public String ArtikelToString(){
         return
-                (this.artbez+";"+ this.artnr+ ";"
+                (this.artnr+";"+ this.artbez+ ";"
                         + this.mge+";"+this.preis+";"+ this.steu);
     }
 
