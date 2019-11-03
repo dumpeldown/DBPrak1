@@ -1,11 +1,6 @@
-import java.io.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Scanner;
 
 public class Main{
-    //TODO eventuell _idx bei jedem Programmneustart löschen, weil sonst wird immer nur angehängt...
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args){
@@ -38,20 +33,5 @@ public class Main{
                         break;
             }
         }
-
-        //Menüführung.
-        //a) erfassen neuer Datensätze
-        //B) alle datensätze anzeigen
-        //C) indexliste anzeigen, suchnummer eingeben,(lineare Suche)  wenn ex: --> fp mit seek() in _dat auf den
-            // offset aus _idx inhalt von datensatz anzeigen
-            //wenn artnr nicht ex: --> meldung anzeigen. JOptionPane.
-        //D) Bei ende des programms: bei neuen Datensätzen -->_idx neu pflegen.
-        // setzen.
-    }
-
-
-
-    public static void seekArtNrIDX(int artnr){
-        //TODO in der alleIndexpaare liste suchen.
     }
 }
