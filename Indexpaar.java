@@ -8,10 +8,11 @@ public class Indexpaar implements Serializable, Comparable{
         this.artnr = artnr;
         this.offset = offset;
     }
+
     private int artnr;
     private long offset;
 
-    static void writeIndexPaar(Indexpaar zuschreiben) {
+    static void writeIndexPaar(Indexpaar zuschreiben){
         FileOutputStream fout = null;
         ObjectOutputStream oos = null;
         try{
@@ -41,18 +42,17 @@ public class Indexpaar implements Serializable, Comparable{
         long fp;
         try{
             DatenVerwaltung.raf_dat.seek(0);
+            fp = DatenVerwaltung.raf_dat.getFilePointer();
 
-        fp = DatenVerwaltung.raf_dat.getFilePointer();
-
-        //solange machen, bis readLine() == null.
-        while((zeile = DatenVerwaltung.raf_dat.readLine()) != null){
+            //solange machen, bis readLine() == null.
+            while((zeile = DatenVerwaltung.raf_dat.readLine()) != null){
                 gespaltet = zeile.split(";");
                 artnr = Integer.parseInt(gespaltet[0]);
                 neuesIndexpaar = new Indexpaar(artnr, fp);
                 indexPaare.add(neuesIndexpaar);
                 Collections.sort(indexPaare);
                 fp = DatenVerwaltung.raf_dat.getFilePointer();
-        }
+            }
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -60,21 +60,24 @@ public class Indexpaar implements Serializable, Comparable{
     }
 
 
-     static void writeMultiple(ArrayList<Indexpaar> alleIndexPaare){
-        for(Indexpaar ip: alleIndexPaare){
+    static void writeMultiple(ArrayList<Indexpaar> alleIndexPaare){
+        for(Indexpaar ip : alleIndexPaare){
             Indexpaar.writeIndexPaar(ip);
         }
     }
 
-     static void showIndexPaare(ArrayList<Indexpaar> indexListe){
+    //TODO auch indexpaar von neuen datensätzen in die liste einfügen.
+    static void showIndexPaare(){
+        ArrayList<Indexpaar>  indexListe = getIndexPaare();
         System.out.println("Alle Indexpaare:\n");
         for(Indexpaar idp : indexListe){
-            System.out.println("   "+idp.artnr+":"+idp.offset);
+            System.out.println("   " + idp.artnr + ":" + idp.offset);
         }
         System.out.println("\n");
         searchIndexPaare(indexListe);
     }
-     static void searchIndexPaare(ArrayList<Indexpaar> il){
+
+    static void searchIndexPaare(ArrayList<Indexpaar> il){
         Scanner sc = new Scanner(System.in);
         long offset = -1;
         System.out.println("Geben Sie eine Artikelnummer ein..:\n");
@@ -95,11 +98,10 @@ public class Indexpaar implements Serializable, Comparable{
         else{
             System.out.println("Zu der eingegebenen Artikelnummer konnte kein Artikel in der Datenbank gefunden werden!");
         }
-
     }
 
     @Override
     public int compareTo(Object o){
-        return Integer.compare(this.artnr, ((Indexpaar)o).artnr);
+        return Integer.compare(this.artnr, ((Indexpaar) o).artnr);
     }
 }

@@ -9,22 +9,27 @@ public class Artikel{
         this.preis = preis;
         this.steu = steu;
     }
+
     private int artnr;
     private String artbez;
     private String mge;
     private double preis;
     private int steu;
 
-     void ArtikelToPrint(){
-        System.out.println(
-                "Artikelbez: "+this.artbez+", ArtNr: "+ this.artnr+ ", Mge: "
-                        + this.mge+", Preis: "+this.preis+" Steuer: "+ this.steu);
+    int getArtnr(){
+        return this.artnr;
     }
 
-     String ArtikelToString(){
+    void ArtikelToPrint(){
+        System.out.println(
+                "Artikelbez: " + this.artbez + ", ArtNr: " + this.artnr + ", Mge: "
+                        + this.mge + ", Preis: " + this.preis + " Steuer: " + this.steu);
+    }
+
+    String ArtikelToString(){
         return
-                (this.artnr+";"+ this.artbez+ ";"
-                        + this.mge+";"+this.preis+";"+ this.steu);
+                (this.artnr + ";" + this.artbez + ";"
+                        + this.mge + ";" + this.preis + ";" + this.steu);
     }
 
     static ArrayList<Artikel> getAllArtikel(){
@@ -70,7 +75,8 @@ public class Artikel{
 
     static void writeArtikel(Artikel neu){
         try{
-            DatenVerwaltung.raf_dat.writeBytes("\n"+neu.ArtikelToString());
+            DatenVerwaltung.raf_dat.seek(DatenVerwaltung.raf_dat.length());
+            DatenVerwaltung.raf_dat.writeBytes("\n" + neu.ArtikelToString());
         }catch(IOException e){
             e.printStackTrace();
         }

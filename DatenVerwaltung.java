@@ -9,7 +9,6 @@ public class DatenVerwaltung{
     static RandomAccessFile raf_dat;
     static RandomAccessFile raf_idx;
     static ArrayList<Indexpaar> alleIndexPaare = new ArrayList<>();
-    static ArrayList<Artikel> alleArtikel = new ArrayList<>();
     private static Scanner sc = new Scanner(System.in);
 
     static void initFiles(){
@@ -25,6 +24,7 @@ public class DatenVerwaltung{
             e.printStackTrace();
         }
     }
+
     static void initIndexPaare(){
         alleIndexPaare = Indexpaar.getIndexPaare();
     }
@@ -47,6 +47,11 @@ public class DatenVerwaltung{
         System.out.print("Artikelnummer:");
         try{
             artnr = Integer.parseInt(sc.nextLine());
+            for(Artikel a : Artikel.getAllArtikel()){
+                if(a.getArtnr() == artnr){
+                    throw new IllegalStateException();
+                }
+            }
             System.out.println("\nArtikelbezeichnung:");
             artbez = sc.nextLine();
             System.out.println("\nMengenabgabe in:");
@@ -55,11 +60,12 @@ public class DatenVerwaltung{
             preis = Double.parseDouble(sc.nextLine());
             System.out.println("\nSteuer:");
             steu = Integer.parseInt(sc.nextLine());
-            Artikel neuerArtikel = new Artikel(artnr, artbez,mge, preis, steu);
-            alleArtikel.add(neuerArtikel);
+            Artikel neuerArtikel = new Artikel(artnr, artbez, mge, preis, steu);
             Artikel.writeArtikel(neuerArtikel);
         }catch(NumberFormatException e){
             System.out.println("Fehler bei der Eingabe.");
+        }catch(IllegalStateException e){
+            System.out.println("Für diese Artikelnummer ist bereits ein Artikel eingetragen!\n");
         }
     }
 }
